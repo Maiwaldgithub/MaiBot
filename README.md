@@ -2,7 +2,7 @@
 MaiBot is a Discord.js Music Bot that is easy to self-host.
 
 
-![Main](https://i.imgur.com/iL6cYy4.png)
+![Main](https://i.imgur.com/g0qNJNQ.png)
 
 ## Setup
 Setting up the MaiBot is very easy
@@ -26,7 +26,7 @@ After installing the dependencies is finished, your Bot is ready!
 Simply type `node main.js` or `npm start` in your command line and your bot should be started.
 ## Commands
 
-![Commands](https://i.imgur.com/sHepqOj.png)
+![Commands](https://i.imgur.com/afM0PEf.png)
 
 
 
