@@ -1,20 +1,16 @@
 module.exports = {
     name: 'resume',
-    aliases: [],
-    category: 'Music',
+    aliases: ['rs'],
     utilisation: '{prefix}resume',
+    voiceChannel: true,
 
     execute(client, message) {
-        if (!message.member.voice.channel) return message.channel.send(`${client.emotes.error} - Du befindest dich in keinem Sprachkanal!`);
+        const queue = player.getQueue(message.guild.id);
 
-        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send(`${client.emotes.error} - Du befindest dich nicht im gleichen Sprachkanal!`);
+        if (!queue) return message.channel.send(`No music currently playing ${message.author}... try again ? ❌`);
 
-        if (!client.player.getQueue(message)) return message.channel.send(`${client.emotes.error} - Zur Zeit wird keine Musik abgespielt!`);
+        const success = queue.setPaused(false);
 
-        if (!client.player.getQueue(message).paused) return message.channel.send(`${client.emotes.error} - Die Musik spielt schon!`);
-
-        const success = client.player.resume(message);
-
-        if (success) message.channel.send(`${client.emotes.success} - Lied ${client.player.getQueue(message).playing.title} fortgesetzt!`);
+        return message.channel.send(success ? `Current music ${queue.current.title} resumed ✅` : `Something went wrong ${message.author}... try again ? ❌`);
     },
 };

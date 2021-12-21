@@ -1,19 +1,16 @@
 module.exports = {
     name: 'stop',
     aliases: ['dc'],
-    category: 'Music',
     utilisation: '{prefix}stop',
+    voiceChannel: true,
 
     execute(client, message) {
-        if (!message.member.voice.channel) return message.channel.send(`${client.emotes.error} - Du befindest dich in keinem Sprachkanal!`);
+        const queue = player.getQueue(message.guild.id);
 
-        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send(`${client.emotes.error} - Du befindest dich nicht im gleichen Sprachkanal!`);
+        if (!queue || !queue.playing) return message.channel.send(`No music currently playing ${message.author}... try again ? ❌`);
 
-        if (!client.player.getQueue(message)) return message.channel.send(`${client.emotes.error} - Zur Zeit wird keine Musik abgespielt!`);
+        queue.destroy();
 
-        client.player.setRepeatMode(message, false);
-        const success = client.player.stop(message);
-
-        if (success) message.channel.send(`${client.emotes.success} - Die Musik wurde gestoppt!`);
+        message.channel.send(`Music stopped into this server, see you next time ✅`);
     },
 };

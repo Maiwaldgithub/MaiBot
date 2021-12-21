@@ -1,44 +1,42 @@
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+
 module.exports = {
     name: 'nowplaying',
     aliases: ['np'],
-    category: 'Music',
     utilisation: '{prefix}nowplaying',
+    voiceChannel: true,
 
     execute(client, message) {
-        if (!message.member.voice.channel) return message.channel.send(`${client.emotes.error} - Du befindest dich in keinem Sprachkanal!`);
+        const queue = player.getQueue(message.guild.id);
 
-        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send(`${client.emotes.error} - Du befindest dich nicht im gleichen Sprachkanal!`);
+        if (!queue || !queue.playing) return message.channel.send(`No music currently playing ${message.author}... try again ? ❌`);
 
-        if (!client.player.getQueue(message)) return message.channel.send(`${client.emotes.error} - Zur Zeit wird keine Musik abgespielt!`);
+        const track = queue.current;
 
-        const track = client.player.nowPlaying(message);
-        const filters = [];
+        const embed = new MessageEmbed();
 
-        Object.keys(client.player.getQueue(message).filters).forEach((filterName) => client.player.getQueue(message).filters[filterName]) ? filters.push(filterName) : false;
+        embed.setColor('RED');
+        embed.setThumbnail(track.thumbnail);
+        embed.setAuthor(track.title, client.user.displayAvatarURL({ size: 1024, dynamic: true }));
 
-        message.channel.send({
-            embed: {
-                color: 'RED',
-                author: { name: track.title },
-                footer: { text: 'Dieser Bot wurde von Maiwald erstellt und zur Verfügung gestellt.' },
-                fields: [
-                    { name: 'Kanal', value: track.author, inline: true },
-                    { name: 'Vorgeschlagen von', value: track.requestedBy.username, inline: true },
-                    { name: 'Aus der Playlist', value: track.fromPlaylist ? 'Ja' : 'Nein', inline: true },
+        const methods = ['disabled', 'track', 'queue'];
 
-                    { name: 'Aufrufe', value: track.views, inline: true },
-                    { name: 'Dauer', value: track.duration, inline: true },
-                    { name: 'aktivierte Filter', value: filters.length + '/' + client.filters.length, inline: true },
+        const timestamp = queue.getPlayerTimestamp();
+        const trackDuration = timestamp.progress == 'Infinity' ? 'infinity (live)' : track.duration;
 
-                    { name: 'Lautstärke', value: client.player.getQueue(message).volume, inline: true },
-                    { name: 'Wiederholmodus', value: client.player.getQueue(message).repeatMode ? 'Ja' : 'Nein', inline: true },
-                    { name: 'Aktuell pausiert', value: client.player.getQueue(message).paused ? 'Ja' : 'Nein', inline: true },
+        embed.setDescription(`Volume **${queue.volume}**%\nDuration **${trackDuration}**\nLoop mode **${methods[queue.repeatMode]}**\nRequested by ${track.requestedBy}`);
 
-                    { name: 'Fortschritt', value: client.player.createProgressBar(message, { timecodes: true }), inline: true }
-                ],
-                thumbnail: { url: track.thumbnail },
-                timestamp: new Date(),
-            },
-        });
+        embed.setTimestamp();
+        embed.setFooter('omegalul', message.author.avatarURL({ dynamic: true }));
+
+        const saveButton = new MessageButton();
+
+        saveButton.setLabel('Save this track');
+        saveButton.setCustomId('saveTrack');
+        saveButton.setStyle('SUCCESS');
+
+        const row = new MessageActionRow().addComponents(saveButton);
+
+        message.channel.send({ embeds: [embed], components: [row] });
     },
 };

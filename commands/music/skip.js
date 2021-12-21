@@ -1,18 +1,16 @@
 module.exports = {
     name: 'skip',
     aliases: ['sk'],
-    category: 'Music',
     utilisation: '{prefix}skip',
+    voiceChannel: true,
 
     execute(client, message) {
-        if (!message.member.voice.channel) return message.channel.send(`${client.emotes.error} - Du befindest dich in keinem Sprachkanal!`);
+        const queue = player.getQueue(message.guild.id);
 
-        if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send(`${client.emotes.error} - Du befindest dich nicht im gleichen Sprachkanal!`);
+        if (!queue || !queue.playing) return message.channel.send(`No music currently playing ${message.author}... try again ? ❌`);
 
-        if (!client.player.getQueue(message)) return message.channel.send(`${client.emotes.error} - Zur Zeit wird keine Musik abgespielt!`);
+        const success = queue.skip();
 
-        const success = client.player.skip(message);
-
-        if (success) message.channel.send(`${client.emotes.success} - Das aktuelle Lied wurde **übersprungen**!`);
+        return message.channel.send(success ? `Current music ${queue.current.title} skipped ✅` : `Something went wrong ${message.author}... try again ? ❌`);
     },
 };

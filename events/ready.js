@@ -1,5 +1,5 @@
 module.exports = async (client) => {
-    console.log(`Eingeloggt als ${client.user.username}. Verfügbar auf ${client.guilds.cache.size} Servern, für insgesamt ${client.users.cache.size} Benutzer.`);
+    console.log(`Logged to the client ${client.user.username}\n-> Ready on ${client.guilds.cache.size} servers for a total of ${client.users.cache.size} users`);
 
-    client.user.setActivity(client.config.discord.activity);
+    client.user.setActivity(client.config.app.playing);
 };
