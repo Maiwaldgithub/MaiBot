@@ -31,7 +31,7 @@ module.exports = {
         embed.setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. ${track.title} | ${track.author}`).join('\n')}\n\nSelect choice between **1** and **${maxTracks.length}** or **cancel** ⬇️`);
 
         embed.setTimestamp();
-        embed.setFooter('omegakekw', message.author.avatarURL({ dynamic: true }));
+        embed.setFooter('MaiBot v4', message.author.avatarURL({ dynamic: true }));
 
         message.channel.send({ embeds: [embed] });
 

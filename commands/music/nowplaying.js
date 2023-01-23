@@ -27,7 +27,7 @@ module.exports = {
         embed.setDescription(`Volume **${queue.volume}**%\nDuration **${trackDuration}**\nLoop mode **${methods[queue.repeatMode]}**\nRequested by ${track.requestedBy}`);
 
         embed.setTimestamp();
-        embed.setFooter('omegalul', message.author.avatarURL({ dynamic: true }));
+        embed.setFooter('MaiBot v4', message.author.avatarURL({ dynamic: true }));
 
         const saveButton = new MessageButton();
 
