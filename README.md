@@ -1,6 +1,8 @@
 # MaiBot
 MaiBot is a Discord.js Music Bot that is easy to self-host.
 
+####Invite : https://discord.com/oauth2/authorize?client_id=751456249744326728&scope=bot&permissions=8
+
 
 ![Main](https://i.imgur.com/g0qNJNQ.png)
 
